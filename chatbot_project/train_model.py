@@ -1,13 +1,34 @@
+# https://blog.salesforceairesearch.com/learned-in-translation-contextualized-word-vectors/
+# https://www.analyticsvidhya.com/blog/2019/11/comprehensive-guide-attention-mechanism-deep-learning/
+# https://towardsdatascience.com/understanding-nlp-word-embeddings-text-vectorization-1a23744f7223
+# The process of converting words into numbers are called Vectorization.
+
 #%%
 import pandas as pd
 from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
 
 with open('data/text.txt') as f:
     corpus = f.read()
-    print(corpus)
-    corpus = word_tokenize(corpus)
+    # corpus = word_tokenize(corpus)
 
-corpus
+
+
+
+# nltk.download('punkt')
+# nltk.download('wordnet')
+
+tokens = word_tokenize(corpus)
+
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(token) for token in tokens]
+
+stemmer = PorterStemmer()
+stemmed_words = [stemmer.stem(token) for token in tokens]
+
+print(lemmatized_words)
+
 
 
 #%%
@@ -53,3 +74,15 @@ output_layer = Dense(units=num_classes, activation='softmax')(weighted)
 
 # Define the model
 model = Model(inputs=input_layer, outputs=output_layer)
+
+
+#%%
+
+
+
+
+
+
+
+
+# %%
