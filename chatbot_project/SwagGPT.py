@@ -53,23 +53,25 @@ class SwagGPT():
 #%%
 
 
-import gensim
-from gensim.models import Word2Vec
+import torch
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-# Example sentence
-sentence = "The quick brown fox jumped over the lazy dog."
+# Load the GPT2 tokenizer and model
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+model = GPT2LMHeadModel.from_pretrained('gpt2')
 
-# Tokenize the sentence
-tokens = gensim.utils.simple_preprocess(sentence)
+#%%
+# Load and tokenize the corpus of text
+with open('data/text.txt', 'r', encoding='utf-8') as f:
+    corpus = f.read()
+    
+inputs = tokenizer(corpus, return_tensors='pt')
 
-# Train a Word2Vec model on the tokens
-model = Word2Vec([tokens], min_count=1, vector_size=100)
+# Train the model on the corpus of text
+outputs = model(**inputs, labels=inputs['input_ids'])
 
-# Get the embedding for each token in the sentence
-embeddings = [model.wv[word] for word in tokens]
+# Compute the loss and backpropagate
+loss = outputs.loss
+loss.backward()
 
-# Print the embeddings for each token
-for word, embedding in zip(tokens, embeddings):
-    print(word, embedding)
 
-# %%
